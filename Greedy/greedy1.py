@@ -7,4 +7,6 @@ for coin in array:
     count += n // coin
     n = n % coin
 
+# version 2
+
 print(count)
