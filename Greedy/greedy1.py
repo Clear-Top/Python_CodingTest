@@ -8,6 +8,7 @@ for coin in array:
     n = n % coin
 
 # version 2
-# This is in office
+# This is in office.
+# This is in home.
 
 print(count)
