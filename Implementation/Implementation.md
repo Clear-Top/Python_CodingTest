@@ -3,3 +3,4 @@
 
 __각 파일들의 간단한 설명__ 은 아래와 같습니다.
 * UpDownLeftRight.py : 2차원 matrix 좌표 문제
+* CountTime3.py : 완전 탐색 문제
