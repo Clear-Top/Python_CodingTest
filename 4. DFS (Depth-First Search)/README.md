@@ -25,5 +25,5 @@ graph =[
 This is a graph implemented by the source code above.
 
 <p align="center">
-    <img src=".\Example%20of%20Graph.png" width="50%" height="50%"/>
+    <img src="..\images\Example of Graph.png" width="50%" height="50%"/>
 </p>
