@@ -17,3 +17,24 @@
 3. 예외처리
     - 3키로, 5키로 설탕봉지로 만들 수 없는 킬로그램이라면 -1 을 반환 
 '''
+
+N = int(input())
+remain = N % 5
+cnt = N / 5 
+
+while(True):
+    if (remain%3==0):
+        cnt += remain//3
+        print(int(cnt))
+        break
+    elif (remain%3!=0):
+        if (N==4 or remain==N):
+            print(-1)
+            break
+        else:
+            remain += 5
+            cnt -= 1            
+    else:
+        if(cnt==0):
+            print(-1)
+            break
