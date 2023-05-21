@@ -30,25 +30,32 @@ for i in range(M):
     G[a][b] = 1
     G[b][a] = 1
 
-print(G)  # [(1, 2), (1, 3), (1, 4), (2, 4), (3, 4)]
+# print(G)  # [(1, 2), (1, 3), (1, 4), (2, 4), (3, 4)]
 
 def DFS(V):
-    visited[V] = 1
+    visited[V] = True
     print(V,end=" ")
     for i in range(1, N+1):
-        if visited[i]==0 and G[V][i]==1:
+        if visited[i]==False and G[V][i]==1:
             DFS(i)
 
 def BFS(V):
     q = deque([V])
-    visited[V] = 1
+    visited[V] = True
     
-    for i in range(1,N+1):
-        if G[V][i] ==1 and visited[i]
-    pass
+    while q:
+        adj_node = q.popleft()
+        print(adj_node, end=" ")
+        for i in range(N+1):
+            if G[adj_node][i] == 1 and visited[i]==False:
+                q.append(i)
+                visited[i] = True
 
 DFS(V)  # 스택 (list) or 재귀
-# BFS(V)  # 큐 (deque)
+visited.clear()
+visited = [False] * (N+1)
+print()
+BFS(V)  # 큐 (deque)
 
 
 
