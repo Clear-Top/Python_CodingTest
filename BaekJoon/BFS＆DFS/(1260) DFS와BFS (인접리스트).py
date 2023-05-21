@@ -16,36 +16,60 @@
 1 2 4 3
 1 2 3 4
 '''
+import sys
 from collections import deque
+
+sys.setrecursionlimit(10**6)
+
 N, M, V = map(int, input().split())
 
-# 인접행렬버전
-G = [[0]*(N+1) for _ in range(N+1)]
+# 인접리스트버전
+G = [[] for _ in range(N+1)]
 
 # G.sort(key=lambda x:x[0])
 visited = [False] * (N+1)
 
+input = sys.stdin.readline
 for i in range(M):
     a, b = map(int, input().split())
-    G[a][b] = 1
-    G[b][a] = 1
+    G[a].append(b)
+    G[b].append(a)
 
-print(G)  # [(1, 2), (1, 3), (1, 4), (2, 4), (3, 4)]
+for i in G:
+    i.sort()
 
+# print(G)
+'''
+G = [
+    [],
+    [2,3,4],
+    [1,4],
+    [1,4],
+    [1,2,3]
+]
+'''
 def DFS(V):
-    visited[V] = 1
-    print(V,end=" ")
-    for i in range(1, N+1):
-        if visited[i]==0 and G[V][i]==1:
+    visited[V] = True
+    print(V, end=" ")
+    for i in G[V]:
+        if visited[i] == False:
+            visited[i] = True
             DFS(i)
-            
-    pass
 
 def BFS(V):
-    pass
+    visited[V] = True
+    q = deque([V])
 
-DFS(V)  # 스택 (list) or 재귀
-# BFS(V)  # 큐 (deque)
+    while q:
+        adj_node = q.popleft()
+        print(adj_node, end=" ")
+        for i in G[adj_node]:
+            if visited[i]==False:
+                q.append(i)
+                visited[i] = True
 
-
+DFS(V)
+print()
+visited = [False] * (N+1)
+BFS(V)
 
