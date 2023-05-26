@@ -22,6 +22,43 @@
 나는 BFS를 선호
 '''
 import sys
+from collections import deque
 input = sys.stdin.readline
 
+def BFS(cabbage):
+    visited = [False] * 50
+    q = deque([cabbage[0][0]])
+    while q:
+        value = q.popleft()
+        for conItem in cabbage[value]:
+        
+        
+        
+    
+
+case_num = int(input())
+result_set = [0] * case_num
+
+for i in range(case_num):
+    """ 
+
+    """
+    # (x,y) 로 받아서 2차원배열 만들기
+    N, M, K = map(int, input().split())
+    cabbage = [[0]*M for i in range(N)] # 초기화
+    
+    for k in range(K):
+        """
+        `for` statement:
+            input: (x, y)
+            result: two-demensional matrix 
+        """
+        x, y = map(int, input().split())
+        cabbage[x][y] = 1
+    
+    earthworm = BFS(cabbage)
+    # print(cabbage)
+
+    # for row in cabbage:
+    #     print(" ".join(map(str, row)))
 
