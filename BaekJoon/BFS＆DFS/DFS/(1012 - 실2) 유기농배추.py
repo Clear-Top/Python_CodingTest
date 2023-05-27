@@ -20,21 +20,35 @@
 
 ''' 인접컴포넌트 개수 찾기
 나는 BFS를 선호
+DFS로도 구현해볼 것
 '''
 import sys
 from collections import deque
 input = sys.stdin.readline
 
-def BFS(cabbage):
-    visited = [False] * 50
-    q = deque([cabbage[0][0]])
-    while q:
-        value = q.popleft()
-        for conItem in cabbage[value]:
-        
-        
-        
+def BFS(cabbage, p):
+    """
+    search `cabbage` in BFS skill
+    input: 1. matrix 2. tuple of (x,y)
+    """
+    # 상 하 좌 우
+    dx = [-1, 1, 0, 0]
+    dy = [0, 0, -1, 1]
     
+    x, y = p[0], p[1]
+    q = deque([(x,y)])
+    cabbage[x][y] = 0
+    while q:
+        x,y = q.popleft()
+        for i in range(4):
+            nx = x + dx[i]
+            ny = y + dy[i]
+            if nx < 0 or nx > N-1 or ny < 0 or ny > M-1:
+                continue
+            if cabbage[nx][ny] == 1:
+                q.append((nx,ny))
+                cabbage[nx][ny] = 0
+            
 
 case_num = int(input())
 result_set = [0] * case_num
@@ -46,7 +60,8 @@ for i in range(case_num):
     # (x,y) 로 받아서 2차원배열 만들기
     N, M, K = map(int, input().split())
     cabbage = [[0]*M for i in range(N)] # 초기화
-    
+    cnt = 0
+
     for k in range(K):
         """
         `for` statement:
@@ -55,8 +70,12 @@ for i in range(case_num):
         """
         x, y = map(int, input().split())
         cabbage[x][y] = 1
-    
-    earthworm = BFS(cabbage)
+    for x in range(N):
+        for y in range(M):
+            if cabbage[x][y] == 1:        
+                 BFS(cabbage, (x, y))
+                 cnt+=1
+    print(cnt)
     # print(cabbage)
 
     # for row in cabbage:
