@@ -22,41 +22,25 @@ def solution(bridge_length: int, weight: int, truck_weights: list):
         3) 종료조건: 다리에 대한 큐가 비면 종료
     """
     
-    # print(bridge_length, weight, truck_weights)
-    
-    spend_time = 0
-    
-    q_for_truct = deque(truck_weights)
-    q_for_bridge = deque()
-    weight_on_bridge = 0
-    length_of_bridge = 0
-    
-    while q_for_truct:
-        
-        bridge_and_truck(q_for_bridge,q_for_truct)  # 디버깅
-        truck = q_for_truct[0]
-        
-        # 트럭이 다리에 올라갔을때 가정
-        weight_on_bridge += truck
-        length_of_bridge += 1
-        # spend_time += 1
-        
-        if length_of_bridge < bridge_length and weight_on_bridge < weight:
-            if q_for_bridge:
-                truck2 = q_for_bridge.popleft()
-                weight_on_bridge -= truck2
-                length_of_bridge -= 1
-            truck = q_for_truct.popleft()
-            q_for_bridge.append(truck)
-        else:   # 제한사항을 둘 중 하나라도 만족못했을 때 
-            if q_for_bridge:
-                truck2 = q_for_bridge.popleft()
-                weight_on_bridge -= truck2
-                length_of_bridge -= 1
-            weight_on_bridge -= truck
-            length_of_bridge -= 1
-            # spend_time += 1
-        spend_time += 1
-    print(spend_time)
+    # 대기트럭에 대한 큐
+    q_truck = deque(truck_weights)
+    # 다리를 지나가는 트럭
+    q_bridge = deque([0 for _ in range(bridge_length)])
+    # 경과시간
+    time = 0
+    # 현재다리 위의 무게
+    current_weight = 0
+    while q_truck or current_weight > 0: 
+        if q_truck:
+            truck = q_truck[0]
+        old_truck = q_bridge.popleft()
+        current_weight -= old_truck
+        if current_weight + truck <= weight and q_truck:
+            q_bridge.append(q_truck.popleft())
+            current_weight += truck
+        else:
+            q_bridge.append(0)
+        time += 1
+    return time
 
-solution(2,10,[7,4,5,6])
+print(solution(100,100,[10]))
