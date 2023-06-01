@@ -23,27 +23,41 @@ def solution(prices):
     1. 시간 요구사항: O(N^2) 은 피해야만 한다.
     2. 아이디어:
         - prices를 스택으로
-        - prices 에서 pop할때마다 cnt += 1
-        - 가장 최근에 pop한것이 이전에 pop한것보다 크다면 pop한 개수만큼 시간기록
-        - 
+        - push할 데이터가 스택의 꼭대기값보다 크다면 push
+        - push할 데이터가 스택의 꼭대기값보다 작다면 pop
     3. 변수설명
         - prices: 주식가격 리스트
         - times: 시간기록 정보
 
     """
     times = [ 0 for _ in prices ]
-
+    prices_list = [ (i,x) for i,x in enumerate(prices)]
+    # print(prices_list)
+    prices_list.sort(key=lambda x: x[1])
+    # print(prices_list)
+    
     cnt = 0
-    index = 0
-    previous_price = 0
-    while prices:
-        price = prices.pop()
-        if price > previous_price:
-            cnt = 1
-        times[-1-index] = cnt
-        cnt += 1
-        index += 1
-        previous_price = price
-    return times
+    previous = 0
+    for i in range(len(prices_list)-1,-1,-1):
+        if (previous < prices_list[i][1]):
+            times[prices_list[i][0]] = cnt
+            cnt = 0
+        
+        
+    print(times)
+    
+    
+    # cnt = 0
+    # index = 0
+    # previous_price = 0
+    # while prices:
+    #     price = prices.pop()
+    #     if price > previous_price:
+    #         cnt = 1
+    #     times[-1-index] = cnt
+    #     cnt += 1
+    #     index += 1
+    #     previous_price = price
+    # return times
 
 print(solution([1,2,3,2,3]))
