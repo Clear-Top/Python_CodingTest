@@ -1,33 +1,40 @@
 import heapq
 def solution(jobs):
-    '''
-    job[0]: 요청시간
-    job[1]: 소요시간 
-    '''
-    heapq.heapify(jobs)
-
+    jobs.sort()
+    
     tmp_jobs = []
-    for job in jobs:
-        # 소요시간 기준으로 오름차순 정렬
-        heapq.heappush(tmp_jobs, (job[1], job[0]))
-
-    avg_time = 0
+    # jobs      : 소요시간 오름차순으로 정렬 (소요시간이 작은거부터 나옴)
+    # tmp_jobs  : 현재시간보다 빨리 요청시간이 발생한 작업들을 소요시간 오름차순으로 정렬
     current_time = 0
-    start_time = 0
-    num = 0
-    while tmp_jobs:
-        '''
-        job[0]: 소요시간
-        job[1]: 요청시간 
-        '''
-        job = heapq.heappop(tmp_jobs)
-        print(f"{start_time}ms 시점에 {job[0]} 걸리는 작업 요청이 들어옵니다.")
-        current_time += (start_time + job[0] - job[1])
-        # print(f"현재작업은 {job[1]}ms 부터 대기하다가, {start_time}ms 시점에 작업을 시작해서 {start_time + job[0]}ms 시점에 작업완료 (요청에서 종료까지: {start_time + job[0] - job[1]}ms)")
-        start_time += job[0]
-        num += 1
+    start_time = -1
+    i = 0
+    result = 0
 
-    return int(current_time / num)
 
-print(solution([[0, 3], [1, 9], [2, 6]]))
-# print(solution([[0, 3], [1, 9], [2, 6]]))
+    while i<len(jobs):
+        for j in range(i, len(jobs)):
+            # 소요시간이 짧더라도 바로 실행할 수 있는 것들부터 처리하려고
+            if start_time < jobs[j][0] <= current_time:
+                # 꺼내서 실행할때는 소요시간이 짧은 순서대로
+                heapq.heappush(tmp_jobs, (jobs[j][1], jobs[j][0]))
+        if tmp_jobs:
+            # job[0]: 소요시간, job[1]: 요청시간
+            job = heapq.heappop(tmp_jobs)       
+            # print(f"{job}을 실행합니다")
+            # print(f"현재시간: {start_time} 종료시간: {current_time+job[1]}")
+
+            # job의 처리가 끝났다고 가정했을 때
+            start_time = current_time
+            current_time += job[0]
+            result += current_time - job[1]
+            i += 1
+        else:
+            current_time += 1
+
+    return int(result/len(jobs))
+
+print(solution([[0, 3], [1, 9], [2, 6]]))       # 9
+print(solution([[0, 3], [10, 1]]))              # 2
+print(solution([[7, 8], [3, 5], [9, 6]]))       # 9
+print(solution([[1, 4], [7, 9], [1000, 3]]))    # 5
+print(solution([[0, 1], [2, 2], [2, 3]]))       # 2
