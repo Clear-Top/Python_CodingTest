@@ -1,42 +1,24 @@
-from collections import deque
-from heapq import heappush, heappop
+import heapq
+
 def solution(program):
-    '''
-    1. program은 처음은 호출순서로 정렬
-    2. 현재시간보다 작은거 program에서 pop하면서 우선순위 큐에 삽입 (점수오름차순)
-    '''
-    hq = []
-    program.sort(key=lambda x:x[1])
-    print(program)
-    q = deque(program)
-    current_time = 0
-    answer = [0] * 11
-    complete_pro = 0
+    answer = [0]*11         # 프로그램 우선순위는 1~10번까지 존재하므로 (answer[0]은 최종 실행 시간)
+    program.sort(key = lambda x : x[1])
+    heap = []         # heapq의 경우 리스트를 사용해야 함
+    cur = 0         # 현재 시각
     
-    while complete_pro < len(program) or hq:
-        # wait_time = 0
-        while q and q[0][1] <= current_time :
-            heappush(hq,q.popleft())
-        if not hq and q[0][1] > current_time:
-            current_time += q[0][1] - current_time
-            wait_time += q[0][1] - current_time
-            continue
-        # if hq and hq[0][1] > current_time:
-        #     current_time += hq[0][1]
-        #     continue
-        exe = heappop(hq)
-        wait_time = current_time - exe[1]    
-        current_time += exe[2]
-        answer[exe[0]] += wait_time
-        wait_time = 0
-        complete_pro += 1
-    answer[0] = current_time
+    def call_program():     # program 배열 안의 프로그램을 pQ에 넣어주는 작업
+        while len(program) > 0 and program[0][1] <= cur:
+            heapq.heappush(heap, program.pop(0))
+    cur = 0
+    while len(program) > 0 or not len(heap) == 0:
+        if len(heap) == 0:      # pQ가 비어있다면
+            cur = program[0][1]        # program 배열의 맨 앞의 값의 시각을 현재 시각으로 설정
+            call_program()
+        execute = heapq.heappop(heap)      # 가장 앞의 값을 제거
+        answer[execute[0]] += (cur - execute[1])      # answer 배열의 해당 우선순위 인덱스에 대기 시간 값을 추가함
+        cur += execute[2]       # 현재 시각을 갱신
+        call_program()
+    
+    answer[0] += cur        # answer[0]은 모든 프로그램이 종료되는 시각
+    
     return answer
-
-
-# print(solution([[2, 3, 10], [1, 3, 5], [3, 5, 3], [3, 12, 2]])) # [20, 5, 0, 16, 0, 0, 0, 0, 0, 0, 0]
-# print(solution([[3, 6, 4], [4, 2, 5], [1, 0, 5], [5, 0, 5]]))   # [19, 0, 0, 4, 3, 14, 0, 0, 0, 0, 0]
-# print(solution([[1, 0, 1], [2, 0, 1], [3, 0, 1], [4, 0, 1]]))   # [19, 0, 0, 4, 3, 14, 0, 0, 0, 0, 0]
-# print(solution([[1, 0, 1], [1, 2, 1], [1, 4, 1], [1, 6, 1]]))   # [19, 0, 0, 4, 3, 14, 0, 0, 0, 0, 0]
-# print(solution([[4, 0, 1], [3, 1, 1], [2, 0, 1], [1, 0, 1]]))   # [19, 0, 0, 4, 3, 14, 0, 0, 0, 0, 0]
-print(solution([[1, 0, 1], [2, 2, 2], [3, 4, 2], [4, 8, 2]]))   # [19, 0, 0, 4, 3, 14, 0, 0, 0, 0, 0]
